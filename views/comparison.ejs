@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/comparison.css">
+  <style>
+    body{color:black;background-color: darkcyan; font-family: verdana;}
+
+</style>
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="./">Cryptocurrency Historical Prices</a>
+          </div>
+          <ul class="nav navbar-nav ">
+            <li ><a href="./">Home</a></li>
+            <li ><a href="/prices">Prices</a></li>
+            <li ><a href="/datasets">Datasets</a></li>
+            <li class="active"><a href='/comparison'>Comparison</a></li>
+          </ul>
+        </div>
+      </nav>
+  <div>
+    <div class='container cry'>
+      <h2 class='page-header'>Choose cryptocurrencies:</h2>
+      <div class= 'cryptoNames'>
+    <ul class='names'>
+    <% cryptonames.sort(function(a,b){if(a>b)return 1; if(a<b) return -1;return 0}); %>
+    <% cryptonames.forEach(function(item){%>
+
+      <%if(!item.includes('Dataset')){%>
+        <%if(data!=''){%>
+          <%if(crypto.includes(item)){%>
+            <li class='crypto checkboxes monthact'><%=item%></li>
+          <%}else{%>
+            <li class='crypto checkboxes'><%=item%></li>
+          <%}%>
+    
+    <%}else{%>
+      <li class='crypto checkboxes'><%=item%></li>
+      <%}%>
+        <%}%>
+
+  <% }) %>
+
+    </ul>
+    </div>
+    <div class="cryptobutton" align='center'>
+    <input  type="button" class='button' value="OK">
+    </div>
+  </div>
+  <%if(data!=''){%>
+  <div class="container mon">
+
+
+    <h2 class='page-header'>Choose a month:</h2>
+    <%years.forEach(function(year){%>
+      
+      <ul class='names'>
+
+          <li class='year'><b><%=year%></b></li>
+      <% data.forEach(function(month){%>
+      <%=console.log(month.year+" "+year)%>
+          <%if(month.year==year){%>
+        
+        <li name='<%=month.year%>' class=' month'><%=month.month%></li>
+            <%}%>
+      <% }) %>
+      <li name='<%=year%>' class='month'>Every Month</li>
+      </ul>
+    <%})%>
+
+    </div>
+  
+    <%}%>
+    </div>
+
+
+  <script>
+
+      // var cryptoArray = [];
+    
+    
+$(".cryptobutton").click(function(){
+    var cryptos= [];
+
+        // $('.names input:checked').each(function() {
+          $('.names li.monthact').each(function(){
+            cryptos.push($(this).text());
+            
+        });
+
+        cryptos.forEach(function(each){
+            console.log(each);
+        })
+        if(cryptos.length>=1){
+          $.post("/comparison",{cryptos:cryptos},function(data){
+        if(data==='done')
+        {
+            console.log(cryptos);
+            window.location.href='/comparison'
+        }
+    });
+        }else{
+          alert("You must choose cryptocurrencies!");
+        }
+
+
+
+});
+
+$(".month").click(function(){
+
+  if($(this).text()=="Every Month"){
+      var year = $(this).attr('name');
+    console.log(year);
+    var monthyear = year;
+    }else{
+      var month = $(this).text();
+      var year = $(this).attr('name');
+    console.log(year+"/"+month);
+    var monthyear = year+"/"+month;
+    }
+    var cryptos =[];
+    // if($(".month").hasClass("monthact")){
+    //   $(".month").removeClass("monthact");
+    // }
+    // if($(this).hasClass("monthact")){
+    //   $(this).removeClass("monthact");
+    //   console.log($(this).attr("class"));
+    // }else{
+    //   $(this).addClass("monthact");
+    //   console.log($(this).attr("class"));
+    // }
+    // console.log(year+"/"+month);
+    // var title = year+"/"+month;
+
+    // var month = $(".monthact").text();
+    // var year = $(".monthact").attr('name');
+    // var monthyear = year +"/"+month ;
+        $('.names li.monthact').each(function() {
+            cryptos.push($(this).text());
+        });
+        
+        // cryptos.forEach(function(each){
+        //     console.log(each);
+        // })
+          $.post("/comparisondates",{cryptos:cryptos,month:monthyear},function(data){
+        if(data==='done')
+        {
+            
+            window.location.href='/comparisondates'
+        }
+    });
+
+    
+});
+
+$(".crypto").click(function(){
+  if(<%=crypto.length%>==0){
+    var cryptoArray = [];
+  }else{
+
+  }
+  
+  console.log(cryptoArray);
+      if($(this).hasClass("monthact")){
+      $(this).removeClass("monthact");
+      console.log($(this).attr("class"));
+    }else{
+      $(this).addClass("monthact");
+      console.log($(this).attr("class"));
+    }
+if(!cryptoArray.includes($(this).val())){
+  cryptoArray.push($(this).val());
+}else{
+  var index = cryptoArray.indexOf($(this).val());
+  if(index>-1){
+    cryptoArray.splice(index,1);
+  }
+}
+
+console.log("On Click Array: "+ cryptoArray );
+
+// $.post("/comparison",{cryptos:cryptoArray},function(data){
+//         if(data==='done')
+//         {
+            
+//             window.location.href='/comparison'
+//         }
+//     });
+});
+
+</script>
+</body>
+<html>

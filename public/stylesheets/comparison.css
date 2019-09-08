@@ -1,0 +1,112 @@
+h1{
+    color:black;
+  }
+  a{
+    color:black;
+  }
+  p{
+    font-size: 30;
+  }
+
+  ul{
+      
+      padding:0;
+      margin: 0 0 10px 0;
+  
+  }
+  ul.names{
+    list-style-type: none;
+    font-size:18px;
+    margin-left: 25px;
+  }
+  ul.columns{
+    list-style-type: none;
+    font-size:18px;
+    margin-left: 25px;
+  }
+  li.crypto:hover{
+    color:lightslategray;
+    box-shadow: 0 1px #666;
+  }
+  li.crypto{
+    text-transform: capitalize;
+    cursor:pointer;
+      margin-right:10px;
+    width:max-content;
+  }
+  li.month{
+    cursor:pointer;
+    display:inline;
+      margin-right:10px;
+  }
+  
+  li.month:hover{
+    color:lightslategray;
+    box-shadow: 0 1px #666;
+  }
+  .monthact{
+    border-radius: 5px;
+    background:#FFFFFF;
+    border: 1px  gray;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .cryptoNames{
+    width:50%;
+    float: left;
+  }
+
+  .cryptobutton{
+    width:100%;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .button{
+    border-radius: 5px;
+    width:60px;
+    background:#FFFFFF;
+    text-align: center;
+  }
+  li.year{
+    
+    display:inline;
+    padding-right:10px;
+    margin-right:10px;
+    border-right: 4px solid ;
+  }
+  
+  div.jumbotron{ 
+    background-color: skyblue;
+   }
+  div.cry{
+  
+    width: 50%;
+    float:left;
+    
+  }
+  div.moncol{
+    width:70%;
+    float: right;
+    
+  }
+  div.mon{
+    width:50%;
+    float:left;
+  }
+  div.col{
+    width:50%;
+    float:right;
+  }
+  div.tablediv{
+    white-space: nowrap;
+
+    height: 500px;
+    
+    display: block;
+    overflow: auto;
+    
+    text-align: center;
+    margin-bottom: 20px;
+  }

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='javascript/Chart.js'></script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/dates.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='javascript/common.js'></script>
+    <script type='text/javascript' src="javascript/jquery.fittext.js"></script>
+<script type='text/javascript' src='javascript/css.js'></script>
+    <script type='text/javascript' src='javascript/standardista-table-sorting.js'></script>
+  
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <style>
+            body{color:black;background-color:darkcyan;font-family: verdana;
+  height: 100%;
+}
+      </style>
+
+</head>
+<body>
+  
+
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="./">Cryptocurrency Historical Prices</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li ><a href="./">Home</a></li>
+            <li><a href="/prices">Prices</a></li>
+            <li><a href="/datasets">Datasets</a></li>
+            <li><a href='/comparison'>Comparison</a></li>
+          </ul>
+        </div>
+      </nav>
+    
+      <div class='container'>
+      
+
+    <h1 class='page-header '>Data for 
+
+      <%compcryptos.forEach(function(crypto,index){%>
+        <%if(index==compcryptos.length-1){%>
+          <%=crypto+"."%>
+        <%}else{%>
+          <%=crypto+","%>
+        <%}%>
+      <%})%>
+        </h1>
+
+    <div class='charts'>
+
+            <div class='col canv' style="display:inline-block">
+              <h3>Open</h3>
+              <canvas id='opencanvas' width='350' height='350'></canvas>
+              </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>High</h3>
+                <canvas id='highcanvas' width='350' height='350'></canvas>
+                </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>Low</h3>
+              <canvas id='lowcanvas' width='350' height='350'></canvas>
+              </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>Close</h3>
+              <canvas id='closecanvas' width='350' height='350'></canvas>
+              </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>Volume</h3>
+              <canvas id='volumecanvas' width='350' height='350'></canvas>
+              </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>Market Cap</h3>
+              <canvas id='capcanvas' width='350' height='350'></canvas>
+              </div>
+              <div class='col canv' style="display:inline-block">
+                <h3>High - Low</h3>
+                <canvas id='highlowcanvas' width='350' height='350'></canvas>
+                </div>
+                <div class='col canv' style="display:inline-block">
+                  <h3>Open - Close</h3>
+                  <canvas id='openclosecanvas' width='350' height='350'></canvas>
+                  </div>
+            
+    
+          </div>
+          <div class="aggr " align='center'>
+          <div class="dropdown">
+            <button class="dropbtn">Maximum</button>
+            <ul class="dropdown-content">
+              <li class='max' name='open'>Open</li>
+              <li class='max ' name='high' >High</li>
+              <li class='max ' name='low' >Low</li>
+              <li class='max' name='close' >Close</li>
+              <li class='max' name='volume' >Volume</li>
+              <li class='max' name='marketcap' >Market Cap</li>
+              <li class='max' name='high/low'>High - Low</li>
+              <li class='max' name='open/close'>Open - Close</li>
+          </ul>
+          </div>
+
+          <div class="dropdown">
+            <button class="dropbtn">Minimum</button>
+            <ul class="dropdown-content">
+              <li class='min' name='open'>Open</li>
+              <li class='min' name='high'>High</li>
+              <li class='min' name='low' >Low</li>
+              <li class='min' name='close' >Close</li>
+              <li class='min' name='volume' >Volume</li>
+              <li class='min' name='marketcap' >Market Cap</li>
+              <li class='min' name='high/low'>High - Low</li>
+              <li class='min' name='open/close'>Open - Close</li>
+          </ul>
+          </div>
+
+          <div class="dropdown">
+            <button class="dropbtn">Average</button>
+            <ul class="dropdown-content">
+              <li class='avg ' name='open' >Open</li>
+              <li class='avg ' name='high' >High</li>
+              <li class='avg ' name='low' >Low</li>
+              <li class='avg ' name='close' >Close</li>
+              <li class='avg ' name='volume' >Volume</li>
+              <li class='avg ' name='marketcap' >Market Cap</li>
+              <li class='avg' name='high/low'>High - Low</li>
+              <li class='avg' name='open/close'>Open - Close</li>
+          </ul>
+          </div>
+        </div>
+
+
+                          <!-- <div class="aggr " align='center'>
+                            <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle dropbtn "  type="button" data-toggle="dropdown">Maximum<span class="caret"></span></button>
+                              <ul class="dropdown-menu">
+                                  <li class='max' name='open'>Open</li>
+                                  <li class='max ' name='high' >High</li>
+                                  <li class='max ' name='low' >Low</li>
+                                  <li class='max' name='close' >Close</li>
+                                  <li class='max' name='volume' >Volume</li>
+                                  <li class='max' name='marketcap' >Market Cap</li>
+                              </ul>
+                            </div>
+                            <div class="dropdown">
+                              <button class="btn btn-primary dropdown-toggle dropbtn"  type="button" data-toggle="dropdown">Minimum<span class="caret"></span></button>
+                                <ul class="dropdown-menu ">
+                                    <li class='min' name='open'>Open</li>
+                                    <li class='min' name='high'>High</li>
+                                    <li class='min' name='low' >Low</li>
+                                    <li class='min' name='close' >Close</li>
+                                    <li class='min' name='volume' >Volume</li>
+                                    <li class='min' name='marketcap' >Market Cap</li>
+                                </ul>
+                              </div>
+                              <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle dropbtn "   type="button" data-toggle="dropdown">Average<span class="caret"></span></button>
+                                  <ul class="dropdown-menu">
+                                    <li class='avg ' name='open' >Open</li>
+                                    <li class='avg ' name='high' >High</li>
+                                    <li class='avg ' name='low' >Low</li>
+                                    <li class='avg ' name='close' >Close</li>
+                                    <li class='avg ' name='volume' >Volume</li>
+                                    <li class='avg ' name='marketcap' >Market Cap</li>
+                                  </ul>
+                                </div>
+                          </div> -->
+
+                          <%console.log(aggregation+" / "+ aggreRes)%>
+                          <%if(aggregation=='max' && aggreRes.length!=0){%>
+                            <%console.log('Max for '+ column + " is: " +aggreRes); %>
+                            
+                          <%aggreRes.forEach(function(res){%>
+                        <h4 class='aggbox text-center' align='center'>The Maximum of <%=res.title%> for <%=text%> is: <%=res.aggreRes%></h4>
+                        <%})%>
+                        <%}else if(aggregation=='max' && aggreRes.length==0){%>
+                          <%aggreRes.forEach(function(res){%>
+                          <h4 align='center' class='aggbox text-center'>The Maximum of <%=res.title%> for <%=text%> is: 0</h4>
+                          <%})%>
+            
+                          <%}%>
+                          
+                          <%if(aggregation=='min' && aggreRes.length!=0){%>
+                            <%console.log('Min for '+ column + " is: " + aggreRes); %>
+                            <%aggreRes.forEach(function(res){%>
+                        <h4 class='aggbox text-center' align='center'>The Minimum of <%=res.title%> for <%=text%> is: <%=res.aggreRes%></h4>
+                        <%})%>
+                        <%}else if(aggregation=='min' && aggreRes.length==0){%>
+                          <%aggreRes.forEach(function(res){%>
+                          <h4 align='center' class='aggbox text-center'>The Minimum of <%=res.title%> for <%=text%> is: 0</h4>
+                          <%})%>
+                          <%}%>
+                          
+                      
+                  
+                        <%if(aggregation=='avg' && aggreRes.length!=0) {%>
+                          <%console.log('Avg for '+ column + " is: " + aggreRes); %>
+                          <%aggreRes.forEach(function(res){%>
+                      <h4 align='center' class='aggbox text-center'>The Average of <%=res.title%> for <%=text%> is: <%=res.aggreRes.toFixed(2)%></h4>
+                      <%})%>
+                        <%}else if(aggregation=='avg' && aggreRes.length==0){%>
+                          <%aggreRes.forEach(function(res){%>
+                          <h4 align='center' class='aggbox text-center'>The Average of <%=res.title%> for <%=text%> is: 0</h4>
+                          <%})%>
+                          <%}%>
+                          
+    <div align='center'  class='tablediv'>
+            <table class="sortable table table-bordered data">
+            <thead class="thead-dark">
+              <tr>
+                <th class='header'></th>
+                <th colspan='<%=compcryptos.length%>' class='header' >Open</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>High</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>Low</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>Close</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>Volume</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>Market Cap</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>High - Low</th>
+                <th colspan='<%=compcryptos.length%>' class='header'>Open - Close</th>
+              </tr>
+              <tr>
+                <th class='header'>Date</th>
+              <%for(var i=0;i<8;i++){%>
+              <%compcryptos.forEach(function(crypto){%>
+                <th class='header'><%=crypto%></th>
+              <%})%>
+              <%}%>
+              </tr>
+            </thead>
+            <tbody>
+              <%dataForTable.forEach(function(item){%>
+              <tr>
+              
+                <td >
+                  <%var modDate = item.date.getDate() ;%>
+                  <%var modMonth = item.date.getMonth() +1;%>
+                  <%var modYear = item.date.getFullYear();%>
+                  <%if(modDate<10 && modMonth<10){%>
+                      <%='0'+ modDate +'/0'+ modMonth + '/' + modYear%>
+                    <%}else if(modDate>=10 && modMonth<10){%>
+                      <%= modDate +'/0'+ modMonth + '/'+ modYear%>
+                    <%}else if(modDate<10 && modMonth>=10){%>
+                      <%= '0' + modDate +'/'+ modMonth + '/'+ modYear%>
+                    <%}else{%>
+                      <%= modDate +'/'+ modMonth + '/'+ modYear%>
+                    <%}%>
+                </td>
+                <%item.opens.forEach(function(open){%>
+                  <td ><%=open%></td>
+                <%})%>
+                <%item.highs.forEach(function(high){%>
+                  <td ><%=high%></td>
+                <%})%>
+                <%item.lows.forEach(function(low){%>
+                  <td ><%=low%></td>
+                <%})%>
+                <%item.closes.forEach(function(close){%>
+                  <td ><%=close%></td>
+                <%})%>
+                <%item.volumes.forEach(function(volume){%>
+                  <td ><%=volume%></td>
+                <%})%>
+                <%item.marketcaps.forEach(function(marketcap){%>
+                  <td ><%=marketcap%></td>
+                <%})%>
+                <%item.highlows.forEach(function(highlow){%>
+                  <td ><%=highlow.toFixed(2)%></td>
+                <%})%>
+                <%item.opencloses.forEach(function(openclose){%>
+                  <td ><%=openclose.toFixed(2)%></td>
+                <%})%>
+          
+              </tr>
+          
+              <%});%>
+            </tbody>
+          
+    
+
+    </table>
+  </div>
+</div>
+
+
+
+<!-- 
+    <script src='javascript/standardista-table-sorting.js'></script> -->
+
+    
+
+              <script>
+
+               
+              $(".max").click(function(){
+                var text= $(this).text();
+    var column=$(this).attr('name');
+    var aggre =$(this).attr('class').match(/max+/)[0];
+    // console.log(aggre+column);
+    $.post("/comparisonaggre",{text:text,column:column,aggre:aggre},function(data){
+        if(data==='done')
+        {
+            window.location.href="/comparisondates";
+        }
+    });
+
+  // $.ajax({
+  //   type: "POST",
+  //   data: {crypto:crypto,cryptos:cryptos},
+  //   url: "months",
+  //   success: function(msg){
+  //     console.log(cryptos);
+  //     window.location.href="/months";
+  //   }
+  // });
+});
+$(".min").click(function(){
+  var text= $(this).text();
+    var column=$(this).attr('name');
+    var aggre =$(this).attr('class').match(/min+/)[0];
+    // console.log(aggre+column);
+    $.post("/comparisonaggre",{text:text,column:column,aggre:aggre},function(data){
+        if(data==='done')
+        {
+            window.location.href="/comparisondates";
+        }
+    });
+
+  // $.ajax({
+  //   type: "POST",
+  //   data: {crypto:crypto,cryptos:cryptos},
+  //   url: "months",
+  //   success: function(msg){
+  //     console.log(cryptos);
+  //     window.location.href="/months";
+  //   }
+  // });
+});
+
+$(".avg").click(function(){
+  var text= $(this).text();
+    var column=$(this).attr('name');
+    var aggre =$(this).attr('class').match(/avg+/)[0];
+    // console.log(aggre);
+    $.post("/comparisonaggre",{text:text,column:column,aggre:aggre},function(data){
+        if(data==='done')
+        {
+            window.location.href="/comparisondates";
+        }
+    });
+
+  // $.ajax({
+  //   type: "POST",
+  //   data: {crypto:crypto,cryptos:cryptos},
+  //   url: "months",
+  //   success: function(msg){
+  //     console.log(cryptos);
+  //     window.location.href="/months";
+  //   }
+  // });
+});
+              </script>
+
+
+        <script>
+        
+        var highchrt = document.getElementById('highcanvas').getContext('2d');
+        var openchrt = document.getElementById('opencanvas').getContext('2d');
+        var lowchrt = document.getElementById('lowcanvas').getContext('2d');
+        var closechrt = document.getElementById('closecanvas').getContext('2d');
+        var volumechrt = document.getElementById('volumecanvas').getContext('2d');
+        var capchrt = document.getElementById('capcanvas').getContext('2d');
+        var highlowchrt = document.getElementById('highlowcanvas').getContext('2d');
+        var openclosechrt = document.getElementById('openclosecanvas').getContext('2d');
+
+          
+        Chart.defaults.global.defaultFontColor = 'black';
+          Chart.defaults.global.legend.labels.fontSize = 11;
+
+          Chart.defaults.global.legend.labels.boxWidth = 6;
+          Chart.defaults.global.tooltips.callbacks.title = function(tooltipItem, data) {
+           return tooltipItem[0].xLabel;
+        };
+        Chart.defaults.global.tooltips.callbacks.label = function(tooltipItem, data) {
+                    return   tooltipItem.yLabel;
+        };
+
+        var cryptos = [];
+        var dates= [];
+        var highs= [];
+        var opens= [];
+        var lows= [];
+        var closes =[];
+        var volumes =[];
+        var caps =[];
+        var highlows = [];
+        var opencloses = [];
+        
+        <%compcryptos.forEach(function(name,index){%>
+          cryptos.push("<%=name%>");
+          var tableHighs = [];
+          var tableOpens = [];
+          var tableCloses = [];
+          var tableLows = [];
+          var tableVolumes = [];
+          var tableMarketcaps = [];
+          var tableHighLows = [];
+          var tableOpenCloses = [];
+          <%dataForTable.forEach(function(date){%>
+            <%if(index<1){%>
+              dates.push("<%=date.date.getDate()%>");
+            <%}%>
+            tableHighs.push("<%=date.highs[index]%>");
+            tableOpens.push("<%=date.opens[index]%>");
+            tableCloses.push("<%=date.closes[index]%>");
+            tableLows.push("<%=date.lows[index]%>");
+            tableVolumes.push("<%=date.volumes[index]%>");
+            tableMarketcaps.push("<%=date.marketcaps[index]%>");
+            tableHighLows.push("<%=date.highlows[index].toFixed(2)%>");
+            tableOpenCloses.push("<%=date.opencloses[index].toFixed(2)%>");
+          <%})%>
+            highs.push(tableHighs);
+            opens.push(tableOpens);
+            closes.push(tableCloses);
+            lows.push(tableLows);
+            volumes.push(tableVolumes);
+            caps.push(tableMarketcaps);
+            highlows.push(tableHighLows);
+            opencloses.push(tableOpenCloses);
+        <%})%>
+
+        console.log(dates);
+        console.log(highs);
+      
+          Chart.defaults.global.defaultFontColor = 'black';
+
+          backgroundColor = [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(204,255,51,0.2)',
+                      'rgba(0,153,102,0.2)',
+                      'rgba(255,153,255,0.2)',
+                      'rgba(255,153,102,0.2)',
+                      'rgba(0,102,0,0.2)',
+                      'rgba(153,0,0,0.2)',
+                      'rgba(255,0,0,0.2)',
+                      'rgba(102,0,102,0.2)',
+                      'rgba(255,255,51,0.2)',
+                      'rgba(255,255,255,0.2)',
+                      'rgba(102,102,0,0.2)',
+                      'rgba(102,51,0,0.2)'
+                  ],
+                  borderColor = [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(204,255,51,1)',
+                      'rgba(0,153,102,1)',
+                      'rgba(255,153,255,1)',
+                      'rgba(255,153,102,1)',
+                      'rgba(0,102,0,1)',
+                      'rgba(153,0,0,1)',
+                      'rgba(255,0,0,1)',
+                      'rgba(102,0,102,1)',
+                      'rgba(255,255,51,1)',
+                      'rgba(255,255,255,1)',
+                      'rgba(102,102,0,1)',
+                      'rgba(102,51,0,1)'
+
+                  ]
+        
+          var HighCanvas = new Chart(highchrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:highs.map((high,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:high }))
+              
+              // datasets: [{
+              //     label: 'High',
+              //     data: highs,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                        stacked: false,
+
+                      }]
+                  },legend:{
+                      labels: {
+                          fontColor:'black'
+                      }
+                  }
+              }
+          });
+
+          // highs.forEach(function(high,index){
+          //   HighCanvas.data.datasets.push({
+          //     label:cryptos[index],
+          //     data:high,
+          //           backgroundColor: [
+          //             'rgba(255, 99, 132, 0.2)',
+          //             'rgba(54, 162, 235, 0.2)',
+          //             'rgba(255, 206, 86, 0.2)',
+          //             'rgba(75, 192, 192, 0.2)',
+          //             'rgba(153, 102, 255, 0.2)',
+          //             'rgba(255, 159, 64, 0.2)'
+          //         ],
+          //         borderColor: [
+          //             'rgba(255,99,132,1)',
+          //             'rgba(54, 162, 235, 1)',
+          //             'rgba(255, 206, 86, 1)',
+          //             'rgba(75, 192, 192, 1)',
+          //             'rgba(153, 102, 255, 1)',
+          //             'rgba(255, 159, 64, 1)'
+          //         ],
+          //         borderWidth: 1
+          //   })
+          // })
+
+
+          var OpenCanvas = new Chart(openchrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:opens.map((open,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:open }))
+              // datasets: [{
+              //     label: 'Open',
+              //     data: opens,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                          stacked: false
+                      }]
+                  }
+              }
+          });
+
+          var LowCanvas = new Chart(lowchrt,{
+              type: 'line',
+              data: {
+              labels: dates,              
+              datasets:lows.map((low,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:low }))
+              // datasets: [{
+              //     label: 'Low',
+              //     data: lows,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                          stacked: false
+                      }]
+                  }
+              }
+          });
+          var CloseCanvas = new Chart(closechrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:closes.map((close,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:close }))
+              // datasets: [{
+              //     label: 'Close',
+              //     data: closes,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                          stacked: false
+                      }]
+                  }
+              }
+          });
+          var VolumeCanvas = new Chart(volumechrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:volumes.map((volume,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:volume }))
+              // datasets: [{
+              //     label: 'Volume',
+              //     data: volumes,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                          stacked: false,
+                          ticks: {
+                    // Abbreviate the millions
+                    callback: function(value, index, values) {
+                      if(value< 1000){
+                        return value;
+                      }else if(value>=1000 && value<1000000 ){
+                        return value / 1e3 + 'K';
+                      }else if(value>=1000000 && value<1000000000){
+                        return value / 1e6 + 'M';
+                      }else{
+                        return value / 1e9 + 'B';
+                      }
+                    }
+                }
+                      }]
+                  }
+              }
+          });
+
+
+          var CapCanvas = new Chart(capchrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:caps.map((cap,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:cap }))
+              // datasets: [{
+              //     label: 'Market Cap',
+              //     data: caps,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                          stacked: false,
+                          ticks: {
+                    // Abbreviate the millions
+                    callback: function(value, index, values) {
+                      if(value < 1000){
+                        return value;
+                      }else if(value>=1000 && value<1000000 ){
+                        return value / 1e3 + 'K';
+                      }else if(value>=1000000 && value<1000000000){
+                        return value / 1e6 + 'M';
+                      }else{
+                        return value / 1e9 + 'B';
+                      }
+                    }
+                }
+                      }]
+                  }
+              }
+          });        
+
+          var HighLowCanvas = new Chart(highlowchrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:highlows.map((highlow,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:highlow }))
+              
+              // datasets: [{
+              //     label: 'High',
+              //     data: highs,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                        stacked: false,
+
+                      }]
+                  },legend:{
+                      labels: {
+                          fontColor:'black'
+                      }
+                  }
+              }
+          });
+          var OpenCloseCanvas = new Chart(openclosechrt,{
+              type: 'line',
+              data: {
+              labels: dates,
+              datasets:opencloses.map((openclose,index)=>({
+                label: cryptos[index], 
+                // backgroundColor:backgroundColor[index],
+                borderColor : borderColor[index],
+                borderWidth: 1,
+                data:openclose }))
+              
+              // datasets: [{
+              //     label: 'High',
+              //     data: highs,
+              //     backgroundColor: [
+              //         'rgba(255, 99, 132, 0.2)',
+              //         'rgba(54, 162, 235, 0.2)',
+              //         'rgba(255, 206, 86, 0.2)',
+              //         'rgba(75, 192, 192, 0.2)',
+              //         'rgba(153, 102, 255, 0.2)',
+              //         'rgba(255, 159, 64, 0.2)'
+              //     ],
+              //     borderColor: [
+              //         'rgba(255,99,132,1)',
+              //         'rgba(54, 162, 235, 1)',
+              //         'rgba(255, 206, 86, 1)',
+              //         'rgba(75, 192, 192, 1)',
+              //         'rgba(153, 102, 255, 1)',
+              //         'rgba(255, 159, 64, 1)'
+              //     ],
+              //     borderWidth: 1
+              // }]
+            },
+              options: { maintainAspectRation:true,
+                  scales: {
+                      yAxes: [{
+                        stacked: false,
+
+                      }]
+                  },legend:{
+                      labels: {
+                          fontColor:'black'
+                      }
+                  }
+              }
+          });
+
+
+
+          </script>
+        
+</body>
+</html>
